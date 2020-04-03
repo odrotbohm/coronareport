@@ -6,12 +6,13 @@ import {TenantAdminRoutingModule} from './tenant-admin-routing.module';
 import { LoginComponent } from './login/login.component';
 import {AngularMaterialModule} from '../angular-material/angular-material.module';
 import {ReactiveFormsModule} from '@angular/forms';
-import { ClientsComponent } from './clients/clients.component';
+import {ClientsListComponent} from './clients-list/clients-list.component';
+import {ClientsCreateComponent} from './clients-create/clients-create.component';
 
 
 
 @NgModule({
-  declarations: [TenantAdminComponent, DashboardComponent, LoginComponent, ClientsComponent],
+  declarations: [TenantAdminComponent, DashboardComponent, LoginComponent, ClientsListComponent, ClientsCreateComponent],
   imports: [
     CommonModule,
     TenantAdminRoutingModule,

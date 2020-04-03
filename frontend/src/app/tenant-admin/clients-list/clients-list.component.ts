@@ -1,17 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
 import {BackendClient} from '../../models/backend-client';
 import {MatTableDataSource} from '@angular/material/table';
+import {TenantClient} from '../../models/tenant-client';
 import {MatSort} from '@angular/material/sort';
 import {ApiService} from '../../services/api.service';
 import {TenantService} from '../../services/tenant.service';
-import {TenantClient} from '../../models/tenant-client';
 import {DiaryEntryDto} from '../../models/diary-entry';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss'],
+  selector: 'app-clients-list',
+  templateUrl: './clients-list.component.html',
+  styleUrls: ['./clients-list.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
@@ -20,7 +20,7 @@ import {DiaryEntryDto} from '../../models/diary-entry';
     ]),
   ],
 })
-export class ClientsComponent implements OnInit {
+export class ClientsListComponent implements OnInit {
   public displayedColumns: string[] = ['surename', 'firstname', 'phone', 'zipCode', 'infected', 'monitoringStatus'];
   public expandedElement: BackendClient | null;
   public dataSource = new MatTableDataSource<TenantClient>();
@@ -44,5 +44,4 @@ export class ClientsComponent implements OnInit {
   toStringSymptoms(entry: DiaryEntryDto): string {
     return entry.symptoms.map(s => s.name).join(', ');
   }
-
 }

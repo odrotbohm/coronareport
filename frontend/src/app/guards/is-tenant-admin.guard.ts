@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad, Route, UrlSegment } from '@angular/router';
-import { Observable } from 'rxjs';
-import { TenantService } from '../services/tenant.service';
+import {Injectable} from '@angular/core';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, CanLoad, Route, UrlSegment} from '@angular/router';
+import {Observable} from 'rxjs';
+import {TenantService} from '../services/tenant.service';
+import {Tenant} from '../models/tenant';
+import {map, take, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +25,17 @@ export class IsTenantAdminGuard implements CanActivate, CanLoad {
     return this.check();
   }
 
-  private check() {
-    if (this.tenantService.tenant$$.getValue() !== null) {
-      return true;
-    }
-
-    this.router.navigate(['/tenant-admin/login']);
+  private check(): Observable<boolean> {
+    return this.tenantService.tenant$$
+      .pipe(
+        take(1),
+        map((tenant: Tenant) => tenant !== null),
+        tap((isLoggedIn) => {
+          if (!isLoggedIn) {
+            this.router.navigate(['/tenant-admin/login']);
+          }
+        })
+      );
   }
 
 }

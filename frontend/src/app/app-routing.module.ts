@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { IsAuthenticatedGuard } from './guards/is-authenticated.guard';
 import { IsNotAuthenticatedGuard } from './guards/is-not-authenticated.guard';
-import {IsTenantAdminGuard} from './guards/is-tenant-admin.guard';
 
 const routes: Routes = [
   {

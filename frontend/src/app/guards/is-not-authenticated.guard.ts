@@ -17,7 +17,9 @@ export class IsNotAuthenticatedGuard implements CanActivate, CanLoad {
       return true;
     }
 
-    this.router.navigate(['/diary']);
+    if (!this.router.url.startsWith('/tenant-admin')) {
+      this.router.navigate(['/diary']);
+    }
   }
 
   canActivate(
@@ -28,7 +30,8 @@ export class IsNotAuthenticatedGuard implements CanActivate, CanLoad {
       return true;
     }
 
-    this.router.navigate(['/diary']);
-
+    if (!this.router.url.startsWith('/tenant-admin')) {
+      this.router.navigate(['/diary']);
+    }
   }
 }
