@@ -1,0 +1,43 @@
+@import "../app.component.scss";
+
+.toolbar {
+  margin-bottom: 40px;
+
+  .tenant-name {
+    font-weight: bold;
+  }
+
+  @media (max-width: $break-sm) {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 15px 10px;
+
+    * {
+      flex-basis: 100%;
+      text-align: center;
+    }
+
+    .tenant-name {
+      margin-bottom: 15px;
+      white-space: normal;
+    }
+
+    a {
+      margin: 5px 0 !important;
+      padding: 5px !important;
+    }
+  }
+
+  a {
+    background-color: rgba(0, 0, 0, .05);
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin: auto 10px;
+    text-decoration: none;
+    color: rgba(0, 0, 0, .87);
+
+    &.active {
+      font-weight: bold;
+    }
+  }
+}

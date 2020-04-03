@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {TenantService} from '../services/tenant.service';
 
 @Component({
   selector: 'app-tenant-admin',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TenantAdminComponent implements OnInit {
 
-  constructor() { }
+  public tenant$$ = this.tenantService.tenant$$;
+
+  constructor(private tenantService: TenantService) { }
 
   ngOnInit(): void {
   }

@@ -1,0 +1,91 @@
+<mat-card class="form__card--small">
+  <h1>Neuer Fall</h1>
+  <form [formGroup]="createForm" (ngSubmit)="submitForm()">
+    <mat-card-content>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Vorname*</mat-label>
+        <input matInput formControlName="firstname" placeholder="Vorname">
+        <mat-error *ngIf="(
+          createForm.controls.firstname.hasError('maxlength') ||
+          createForm.controls.firstname.hasError('minlength')) &&
+          !createForm.controls.firstname.hasError('required')"
+        >
+          Der Name muss zwischen 2 und 100 Zeichen lang sein
+        </mat-error>
+        <mat-error *ngIf="createForm.controls.firstname.hasError('required')">
+          Vorname ist ein <strong>Pflichtfeld</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Nachname*</mat-label>
+        <input matInput formControlName="surename" placeholder="Nachname">
+        <mat-error *ngIf="(
+          createForm.controls.surename.hasError('maxlength') ||
+          createForm.controls.surename.hasError('minlength')) &&
+          !createForm.controls.surename.hasError('required')"
+        >
+          Der Name muss zwischen 2 und 100 Zeichen lang sein
+        </mat-error>
+        <mat-error *ngIf="createForm.controls.surename.hasError('required')">
+          Nachname ist ein <strong>Pflichtfeld</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Telefonnummer*</mat-label>
+        <input matInput formControlName="phone" placeholder="Telefonnummer">
+        <mat-error *ngIf="createForm.controls.surename.hasError('required')">
+          Telefonnummer ist ein <strong>Pflichtfeld</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Testdatum*</mat-label>
+        <input matInput
+               formControlName="dateTest"
+               placeholder="Testdatum"
+               [ngxMatDatetimePicker]="dateTestPicker"
+               [max]="today"
+        />
+        <mat-error *ngIf="createForm.controls.surename.hasError('required')">
+          Testdatum ist ein <strong>Pflichtfeld</strong>
+        </mat-error>
+        <mat-datepicker-toggle matSuffix [for]="dateTestPicker"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #dateTestPicker
+          [showSpinners]="true"
+          [showSeconds]="false"
+          [stepMinute]="5"
+        >
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+      <mat-form-field class="form__input--full-width" appearance="outline">
+        <mat-label>Beginn Quarantäne*</mat-label>
+        <input matInput
+               formControlName="dateQuarantine"
+               placeholder="Beginn Quarantäne"
+               [ngxMatDatetimePicker]="dateQuarantinePicker"
+               [max]="today"
+        />
+        <mat-error *ngIf="createForm.controls.surename.hasError('required')">
+          Beginn Quarantäne ist ein <strong>Pflichtfeld</strong>
+        </mat-error>
+        <mat-datepicker-toggle matSuffix [for]="dateQuarantinePicker"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #dateQuarantinePicker
+          [showSpinners]="true"
+          [showSeconds]="false"
+          [stepMinute]="5"
+        >
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form__input--full-width">
+        <mat-label>Kommentar</mat-label>
+        <textarea matInput formControlName="comment" placeholder="Kommentar"></textarea>
+      </mat-form-field>
+      <p><small>* Pflichtfelder</small></p>
+    </mat-card-content>
+    <mat-card-actions>
+      <div style="flex: auto 1 1;"></div>
+      <button mat-button mat-raised-button color="primary" [disabled]="createForm.invalid" type="submit">Fall anlegen</button>
+    </mat-card-actions>
+  </form>
+</mat-card>

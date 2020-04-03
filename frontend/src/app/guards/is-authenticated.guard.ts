@@ -17,7 +17,9 @@ export class IsAuthenticatedGuard implements CanActivate, CanLoad {
       return true;
     }
 
-    this.router.navigate(['/welcome']);
+    if (!this.router.url.startsWith('/tenant-admin')) {
+      this.router.navigate(['/welcome']);
+    }
   }
 
   canActivate(
@@ -28,7 +30,9 @@ export class IsAuthenticatedGuard implements CanActivate, CanLoad {
       return true;
     }
 
-    this.router.navigate(['/welcome']);
+    if (!this.router.url.startsWith('/tenant-admin')) {
+      this.router.navigate(['/welcome']);
+    }
 
   }
 

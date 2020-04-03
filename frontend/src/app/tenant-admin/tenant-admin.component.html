@@ -1,1 +1,7 @@
+<mat-toolbar class="toolbar">
+    <span class="tenant-name">{{(tenant$$ | async)?.name}}</span>
+    <span style="flex: 1 1 auto;"></span>
+    <a routerLink="/tenant-admin/clients/list" routerLinkActive="active">Fallübersicht</a>
+    <a routerLink="/tenant-admin/clients/new" routerLinkActive="active">Neuer Fall</a>
+</mat-toolbar>
 <router-outlet></router-outlet>

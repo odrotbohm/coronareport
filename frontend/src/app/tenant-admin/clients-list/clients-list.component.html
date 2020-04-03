@@ -31,10 +31,10 @@
       <th mat-header-cell *matHeaderCellDef> Status </th>
       <td mat-cell *matCellDef="let element">
 
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('OK')" style="color:green;"><mat-icon>done</mat-icon> {{element.monitoringMessage}}</span>
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('CHECK_HEALTH')" style="color:orange;"><mat-icon>healing</mat-icon> {{element.monitoringMessage}}</span>
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('END_OF_QUARANTINE')" style="color:green;"><mat-icon>no_meeting_room</mat-icon> {{element.monitoringMessage}}</span>
-          <span class="with-icon" *ngIf="element.monitoringStatus.includes('OVERDUE')" style="color:red;"><mat-icon>close</mat-icon> {{element.monitoringMessage}}</span>
+        <span class="with-icon" *ngIf="element.monitoringStatus.includes('OK')" style="color:green;"><mat-icon>done</mat-icon> {{element.monitoringMessage}}</span>
+        <span class="with-icon" *ngIf="element.monitoringStatus.includes('CHECK_HEALTH')" style="color:orange;"><mat-icon>healing</mat-icon> {{element.monitoringMessage}}</span>
+        <span class="with-icon" *ngIf="element.monitoringStatus.includes('END_OF_QUARANTINE')" style="color:green;"><mat-icon>no_meeting_room</mat-icon> {{element.monitoringMessage}}</span>
+        <span class="with-icon" *ngIf="element.monitoringStatus.includes('OVERDUE')" style="color:red;"><mat-icon>close</mat-icon> {{element.monitoringMessage}}</span>
       </td>
     </ng-container>
 

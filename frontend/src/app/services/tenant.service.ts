@@ -26,7 +26,9 @@ export class TenantService {
 
   constructor(@Inject(DOCUMENT) private document) {
     this.getTenantFromLocation(document.location);
+    this.getTenantFromLocalstorage();
   }
+
 
   private getTenantFromLocation(location: Location) {
     const hostname = location.hostname;
@@ -50,6 +52,13 @@ export class TenantService {
     }
   }
 
+  private getTenantFromLocalstorage() {
+    const storedTenant = localStorage.getItem('tenant');
+    if (storedTenant) {
+      this.tenant$$.next(JSON.parse(storedTenant));
+    }
+  }
+
   public checkLogin(username: string, password: string): Observable<Tenant> {
     if (username !== MOCK_TENANT_1.userName && username !== MOCK_TENANT_2.userName) {
       return of(MOCK_TENANT_2).pipe(map(val => {
@@ -69,7 +78,8 @@ export class TenantService {
           }
           throw new Error('Incorrect username or password');
         }),
-        tap(tenant => this.tenant$$.next(tenant))
+        tap(tenant => this.tenant$$.next(tenant)),
+        tap(tenant => localStorage.setItem('tenant', JSON.stringify(tenant)))
       );
   }
 }
