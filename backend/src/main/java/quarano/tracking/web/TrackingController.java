@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import quarano.auth.web.LoggedIn;
+import quarano.core.web.ErrorsDto;
 import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.EmailAddress;
@@ -31,18 +32,26 @@ import quarano.tracking.TrackedPersonRepository;
 import quarano.tracking.ZipCode;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.Errors;
+import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +60,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 /**
  * @author Oliver Drotbohm
@@ -62,6 +72,7 @@ public class TrackingController {
 	private final @NonNull TrackedPersonRepository repository;
 	private final @NonNull ContactPersonRepository contacts;
 	private final @NonNull ModelMapper mapper;
+	private final @NonNull MessageSourceAccessor messages;
 
 	@GetMapping("/api/enrollment/details")
 	public HttpEntity<?> enrollmentOverview(@LoggedIn TrackedPerson person) {
@@ -111,7 +122,11 @@ public class TrackingController {
 	}
 
 	@PostMapping("/api/encounters")
-	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, @LoggedIn TrackedPerson person) {
+	HttpEntity<?> addEncounters(@Valid @RequestBody NewEncounter payload, Errors errors, @LoggedIn TrackedPerson person) {
+
+		if (errors.hasErrors() && errors.hasFieldErrors("contact")) {
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+		}
 
 		return contacts.findById(payload.getContactId()) //
 				.filter(it -> it.belongsTo(person)) //
@@ -127,7 +142,12 @@ public class TrackingController {
 
 					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
 
-				}).orElseGet(() -> ResponseEntity.badRequest().body("Invalid contact identifier!"));
+				}).orElseGet(() -> {
+
+					errors.rejectValue("contact", "Invalid.contact", new Object[] { payload.getContact().toString() }, "");
+
+					return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+				});
 	}
 
 	@GetMapping("/api/encounters/{id}")
@@ -150,15 +170,38 @@ public class TrackingController {
 		return null;
 	}
 
+	@ExceptionHandler
+	public HttpEntity<?> handle(HttpMessageNotReadableException o_O) {
+
+		var cause = o_O.getCause();
+
+		if (InvalidFormatException.class.isInstance(cause)) {
+
+			var invalidFormat = (InvalidFormatException) cause;
+
+			Errors errors = new MapBindingResult(new HashMap<>(), "bean");
+
+			String path = invalidFormat.getPath().stream() //
+					.map(it -> it.getFieldName()) //
+					.collect(Collectors.joining("."));
+
+			errors.rejectValue(path, "Invalid." + path);
+
+			return ResponseEntity.badRequest().body(ErrorsDto.of(errors, messages));
+		}
+
+		return ResponseEntity.badRequest().build();
+	}
+
 	@Value
 	@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
 	static class NewEncounter {
 
-		String contactId;
-		LocalDate date;
+		@NotNull UUID contact;
+		@NotNull @PastOrPresent LocalDate date;
 
 		ContactPersonIdentifier getContactId() {
-			return ContactPersonIdentifier.of(UUID.fromString(contactId));
+			return ContactPersonIdentifier.of(contact);
 		}
 	}
 }

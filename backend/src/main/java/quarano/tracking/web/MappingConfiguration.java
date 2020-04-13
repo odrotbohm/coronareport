@@ -16,20 +16,16 @@
 package quarano.tracking.web;
 
 import de.wevsvirushackathon.coronareport.client.Client;
-import quarano.reference.NewSymptom;
 import quarano.reference.NewSymptomRepository;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
-import quarano.tracking.ContactPerson.ContactPersonIdentifier;
 import quarano.tracking.ContactPersonRepository;
 import quarano.tracking.DiaryEntry;
 import quarano.tracking.EmailAddress;
 import quarano.tracking.PhoneNumber;
 import quarano.tracking.TrackedPerson;
 import quarano.tracking.ZipCode;
-
-import java.util.UUID;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -73,10 +69,6 @@ public class MappingConfiguration {
 
 		mapper.addConverter(BODY_TEMPERATURE_TO_FLOAT, BodyTemperature.class, float.class);
 		mapper.addConverter(FLOAT_TO_BODY_TEMPERATURE, float.class, BodyTemperature.class);
-
-		mapper.addConverter(context -> symptoms.findById(context.getSource()).orElse(null), UUID.class, NewSymptom.class);
-		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
-				UUID.class, ContactPerson.class);
 
 		mapper.typeMap(de.wevsvirushackathon.coronareport.contactperson.ContactPerson.class, ContactPerson.class)
 				.setPreConverter(context -> {
@@ -130,10 +122,6 @@ public class MappingConfiguration {
 			var source = context.getSource();
 
 			return DiaryEntry.of(null, source.getDate());
-
-		}).addMappings(it -> {
-
-			it.using(FLOAT_TO_BODY_TEMPERATURE).map(DiaryEntryDto::getBodyTemperature, DiaryEntry::setBodyTemperature);
 
 		});
 	}
