@@ -16,8 +16,8 @@
 package quarano.tracking.web;
 
 import de.wevsvirushackathon.coronareport.client.Client;
-import de.wevsvirushackathon.coronareport.symptomes.Symptom;
-import de.wevsvirushackathon.coronareport.symptomes.SymptomRepository;
+import quarano.reference.NewSymptom;
+import quarano.reference.NewSymptomRepository;
 import quarano.tracking.Address.HouseNumber;
 import quarano.tracking.BodyTemperature;
 import quarano.tracking.ContactPerson;
@@ -62,7 +62,7 @@ public class MappingConfiguration {
 	private static final Converter<BodyTemperature, Float> BODY_TEMPERATURE_TO_FLOAT //
 			= source -> source.getSource().getValue();
 
-	public MappingConfiguration(ModelMapper mapper, SymptomRepository symptoms, ContactPersonRepository contacts) {
+	public MappingConfiguration(ModelMapper mapper, NewSymptomRepository symptoms, ContactPersonRepository contacts) {
 
 		mapper.getConfiguration().setMethodAccessLevel(AccessLevel.PACKAGE_PRIVATE);
 
@@ -74,7 +74,7 @@ public class MappingConfiguration {
 		mapper.addConverter(BODY_TEMPERATURE_TO_FLOAT, BodyTemperature.class, float.class);
 		mapper.addConverter(FLOAT_TO_BODY_TEMPERATURE, float.class, BodyTemperature.class);
 
-		mapper.addConverter(context -> symptoms.findById(context.getSource()).orElse(null), UUID.class, Symptom.class);
+		mapper.addConverter(context -> symptoms.findById(context.getSource()).orElse(null), UUID.class, NewSymptom.class);
 		mapper.addConverter(context -> contacts.findById(ContactPersonIdentifier.of(context.getSource())).orElse(null),
 				UUID.class, ContactPerson.class);
 
