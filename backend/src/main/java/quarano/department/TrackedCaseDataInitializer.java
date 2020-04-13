@@ -80,7 +80,7 @@ class TrackedCaseDataInitializer implements ApplicationListener<ApplicationReady
 						}
 
 						if (it.isCompletedContactRetro()) {
-							case_.markEnrollmentContactsSubmitted();
+							case_.markEnrollmentCompleted(EnrollmentCompletion.WITHOUT_ENCOUNTERS);
 						}
 
 						cases.save(case_);
