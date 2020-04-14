@@ -18,6 +18,7 @@ package quarano;
 import org.jddd.core.types.Identifier;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 @SpringBootApplication
 @EnableJpaAuditing
 @AutoConfigurationPackage
+@ConfigurationPropertiesScan
 public class Quarano {
 
 	// public static void main(String... args) {
