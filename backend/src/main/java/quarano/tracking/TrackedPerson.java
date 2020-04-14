@@ -25,6 +25,7 @@ import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import quarano.core.QuaranoAggregate;
+import quarano.tracking.Encounter.EncounterIdentifier;
 import quarano.tracking.TrackedPerson.TrackedPersonIdentifier;
 
 import java.io.Serializable;
@@ -117,6 +118,16 @@ public class TrackedPerson extends QuaranoAggregate<TrackedPerson, TrackedPerson
 
 	public boolean hasBeenInTouchWith(ContactPerson person, Period period) {
 		return Encounters.of(encounters).hasBeenInTouchWith(person, period);
+	}
+
+	public TrackedPerson removeEncounter(EncounterIdentifier identifier) {
+
+		encounters.stream() //
+				.filter(it -> it.hasId(identifier)) //
+				.findFirst() //
+				.ifPresent(encounters::remove);
+
+		return this;
 	}
 
 	@Value(staticConstructor = "of")

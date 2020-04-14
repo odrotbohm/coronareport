@@ -126,7 +126,7 @@ public class TrackingController {
 				}) //
 				.<HttpEntity<?>> map(it -> {
 
-					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId().toString(), person);
+					var encounterHandlerMethod = on(TrackingController.class).getEncounter(it.getId(), person);
 					var encounterUri = fromMethodCall(encounterHandlerMethod).build().toUri();
 
 					return ResponseEntity.created(encounterUri).body(EncounterDto.of(it, person));
@@ -139,24 +139,22 @@ public class TrackingController {
 				});
 	}
 
-	@GetMapping("/api/encounters/{id}")
-	HttpEntity<?> getEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
-
-		var identifier = EncounterIdentifier.of(UUID.fromString(id));
+	@GetMapping("/api/encounters/{identifier}")
+	HttpEntity<?> getEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
 		return ResponseEntity.of(person.getEncounters() //
 				.havingIdOf(identifier) //
 				.map(it -> EncounterDto.of(it, person)));
 	}
 
-	@DeleteMapping("/api/encounters/{id}")
-	HttpEntity<?> removeEncounter(@PathVariable String id, @LoggedIn TrackedPerson person) {
+	@DeleteMapping("/api/encounters/{identifier}")
+	HttpEntity<?> removeEncounter(@PathVariable EncounterIdentifier identifier, @LoggedIn TrackedPerson person) {
 
-		var identifier = EncounterIdentifier.of(UUID.fromString(id));
+		person.removeEncounter(identifier); //
 
-		person.getEncounters().havingIdOf(null);
+		repository.save(person);
 
-		return null;
+		return ResponseEntity.ok().build();
 	}
 
 	@Value
