@@ -91,6 +91,10 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		return this;
 	}
 
+	public Symptoms getSymptoms() {
+		return Symptoms.of(symptoms);
+	}
+
 	List<Encounter> toEncounters() {
 
 		return contacts.stream() //
@@ -128,5 +132,4 @@ public class DiaryEntry extends QuaranoEntity<TrackedPerson, DiaryEntryIdentifie
 		private static final long serialVersionUID = -8938479214117686141L;
 		private final UUID id;
 	}
-
 }

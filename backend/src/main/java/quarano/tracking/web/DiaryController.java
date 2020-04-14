@@ -81,7 +81,7 @@ class DiaryController {
 	}
 
 	@GetMapping("/api/diary/{identifier}")
-	HttpEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, @LoggedIn TrackedPerson person) {
+	public HttpEntity<?> getDiaryEntry(@PathVariable DiaryEntryIdentifier identifier, @LoggedIn TrackedPerson person) {
 
 		var dto = person.getDiary() //
 				.getEntryFor(identifier) //
