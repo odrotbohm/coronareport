@@ -1,6 +1,7 @@
 package de.wevsvirushackathon.coronareport;
 
 import quarano.Quarano;
+import quarano.core.web.MapperWrapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
@@ -28,4 +29,8 @@ public class CoronareportBackendApplication {
 		return new ModelMapper();
 	}
 
+	@Bean
+	MapperWrapper wrapper(ModelMapper mapper) {
+		return new MapperWrapper(mapper);
+	}
 }
