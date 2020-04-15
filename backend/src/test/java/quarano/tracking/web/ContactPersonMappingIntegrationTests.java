@@ -71,5 +71,6 @@ public class ContactPersonMappingIntegrationTests {
 		assertThat(result.getId()).isEqualTo(reference.getId());
 		assertThat(result.getFirstName()).isEqualTo(person.getFirstName());
 		assertThat(result.getLastName()).isEqualTo(person.getLastName());
+		assertThat(result.getStreet()).isEqualTo(person.getAddress().getStreet());
 	}
 }
